@@ -1,6 +1,6 @@
 from functools import wraps
 from itsdangerous import json
-from nltk.corpus import stopwords
+# from nltk.corpus import stopwords
 from flask import send_file
 
 from flask import Flask, abort, request,render_template
