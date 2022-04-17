@@ -13,10 +13,12 @@ import automata.base.exceptions as exceptions
 from automata.base.automaton import Automaton
 
 app = Flask(__name__)
-CORS(app)
+# CORS(app)
+CORS(app, resources={r"*": {"origins": "*"}})
 
-@app.route('/api/isDFA',method=['POST'])
+@app.route('/api/isDFA',methods=['POST'])
 # @check_login
+# @cross_origin()
 def isDFA():
     a=request.json['dfa_data']
     try:
