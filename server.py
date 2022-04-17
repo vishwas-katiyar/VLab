@@ -4,7 +4,7 @@ from itsdangerous import json
 from flask import send_file
 
 from flask import Flask, abort, request,render_template
-from flask_cors import CORS
+from flask_cors import CORS,cross_origin
 from sample import clean_
 
 from automata.fa.dfa import DFA
@@ -16,9 +16,10 @@ app = Flask(__name__)
 # CORS(app)
 CORS(app, resources={r"*": {"origins": "*"}})
 
+app.config['CORS_HEADERS'] = 'Content-Type'
 @app.route('/api/isDFA',methods=['POST'])
 # @check_login
-# @cross_origin()
+@cross_origin()
 def isDFA():
     a=request.json['dfa_data']
     try:
