@@ -15,7 +15,7 @@ from automata.base.automaton import Automaton
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/api/isDFA')
+@app.route('/api/isDFA',method=['POST'])
 # @check_login
 def isDFA():
     a=request.json['dfa_data']
