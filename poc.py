@@ -3,7 +3,7 @@ import requests
 dfa = 'http://127.0.0.1:5050/api/isDfaAccept_input'
 nfa = 'http://127.0.0.1:5050/api/isNfa'
 nfa_accept = 'http://127.0.0.1:5050/api/isNfaAccept_input'
-nfa_read = 'http://127.0.0.1:5050/api/isNfaRead_input'
+# nfa_read = 'http://127.0.0.1:5050/api/isNfaRead_input'
 
 myobj = {'somekey': 'somevalue'}
 
