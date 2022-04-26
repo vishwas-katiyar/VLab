@@ -5,154 +5,82 @@ from flask import send_file
 
 from flask import Flask, abort, request,render_template
 from flask_cors import CORS,cross_origin
-from sample import clean_
+from sample import clean_, clean_DFA_NFA
 
-from automata.fa.dfa import DFA
-from automata.fa.nfa import NFA
-import automata.base.exceptions as exceptions
-from automata.base.automaton import Automaton
+# from automata.fa.dfa import DFA
+from DFA import DFA
+from NDFA import NDFA
+
+from nfa_to_dfa import function_Nfa_Dfa
+# from automata.fa.nfa import NFA
+# import automata.base.exceptions as exceptions
+# from automata.base.automaton import Automaton
 
 app = Flask(__name__)
 # CORS(app)
 CORS(app, resources={r"*": {"origins": "*"}})
 
 app.config['CORS_HEADERS'] = 'Content-Type'
-@app.route('/api/isDFA',methods=['POST'])
+@app.route('/api/Test',methods=['POST'])
 # @check_login
 @cross_origin()
-def isDFA():
-    a=request.json['dfa_data']
-    try:
-        states,input_symbol,transitions,initial_state,final_states=clean_(a)
-        print(states,input_symbol,transitions,initial_state,final_states)
-        dfa = DFA(
-        states=states,
-        input_symbols=input_symbol,
-        transitions=transitions,
-        initial_state=initial_state,
-        final_states=final_states
-        )
-        # print(dfa.accepts_input('00'))
-        return str(dfa.validate())
-    except:
-        return 'Not a Valid DFA'
-
-@app.route('/api/isDfaAccept_input',methods=['POST'])
-def isDfaAccept_input():
-    # print('PPPPPPPPPPPPPPP',request.data)
-    a=request.json['dfa_data']
+def TEST():
+    type=request.json['type']
+    a=request.json['data']
     input_string=request.json['input_string']
-    # print(request.form)
-    # print(request.get_json(force=True))
-    try:
-        states,input_symbol,transitions,initial_state,final_states=clean_(a)
-        print(states,input_symbol,transitions,initial_state,final_states)
-        dfa = DFA(
-        states=states,
-        input_symbols=input_symbol,
-        transitions=transitions,
-        initial_state=initial_state,
-        final_states=final_states
-        )
-        # print()
-        return str(dfa.accepts_input(input_string))
-    except:
-        return 'Not a Valid DFA'
+    if type=='DFA':
+        return TestDFA(a,input_string)
+    if type=='NDFA':
+        print('NDFA')
+        return TestNDFA(a,input_string)
+    if type=='DFA_NFA':
+        return TestDFA_NFA(a,input_string)
 
-@app.route('/api/isDfaRead_input',methods=['POST'])
-def isDfaRead_input():
-    a=request.json['dfa_data']
-    input_string=request.json['input_string']
+
+
+def TestDFA(a,input_string):
     try:
+    # if 1:
         states,input_symbol,transitions,initial_state,final_states=clean_(a)
-        print(states,input_symbol,transitions,initial_state,final_states)
         dfa = DFA(
         states=states,
-        input_symbols=input_symbol,
+        alphabet=input_symbol,
         transitions=transitions,
         initial_state=initial_state,
         final_states=final_states
         )
-        # print()
-        return str(dfa.read_input(input_string))
+        return {'response':str(dfa.is_string_valid(input_string))}
     except:
         return 'Not a Valid DFA'
 
 
 
-@app.route('/api/isNfa',methods=['POST'])
-def isNFA():
-    a=request.json['nfa_data']
+def TestNDFA(a,input_string):
     try:
+    # if 1:
         states,input_symbol,transitions,initial_state,final_states=clean_(a)
-        print(states,input_symbol,transitions,initial_state,final_states)
-        nfa = NFA(
+        ndfa = NDFA(
         states=states,
-        input_symbols=input_symbol,
+        alphabet=input_symbol,
         transitions=transitions,
         initial_state=initial_state,
         final_states=final_states
         )
-        print('NFAA')
-        return str(nfa.validate())
+        # print(ndfa.is_string_valid(input_string))
+        # print(transitions)
+        # print (ndfa.convert_to_dfa())
+
+        return {'response':str(ndfa.is_string_valid(input_string))}
+
     except:
-        return 'Not a Valid NFA'
+        return 'Not a Valid NDFA'
 
 
-
-@app.route('/api/isNfaAccept_input',methods=['POST'])
-def isNfaAccept_input():
-    print('###########3')
-
-    # print('PPPPPPPPPPPPPPP',request.data)
-    a=request.json['nfa_data']
-    input_string=request.json['input_string']
-    # print(request.form)
-    # print(request.get_json(force=True))
-    try:
-        states,input_symbol,transitions,initial_state,final_states=clean_(a)
-        # print(states,input_symbol,transitions,initial_state,final_states)
-        nfa = NFA(
-        states=states,
-        input_symbols=input_symbol,
-        transitions=transitions,
-        initial_state=initial_state,
-        final_states=final_states
-        )
-        print('###########3')
-        return str(nfa.accepts_input(input_string))
-    except:
-        return 'Not a Valid NFA'
-
-
-@app.route('/api/isNfaRead_input',methods=['POST'])
-def isNfaRead_input():
-    # print('PPPPPPPPPPPPPPP',request.data)
-    print('###########3')
-
-    a=request.json['nfa_data']
-    input_string=request.json['input_string']
-    # print(request.form)
-    # print(request.get_json(force=True))
-    try:
-
-    # if True:
-        states,input_symbol,transitions,initial_state,final_states=clean_(a)
-        print(states,input_symbol,transitions,initial_state,final_states)
-        nfa = NFA(
-        states=states,
-        input_symbols=input_symbol,
-        transitions=transitions,
-        initial_state=initial_state,
-        final_states=final_states
-        )
-        print('###########3')
-        return str(nfa.read_input(input_string))
-    except exceptions.RejectionException:
-        return 'RejectionException'
-    except :
-        return 'Not A valid NFA'
-
+def TestDFA_NFA(a,input_string):
+    print('here')
+    a1,a2,a3,a4,a5,a6,a7,a8,a9=clean_DFA_NFA(a)
+    res=function_Nfa_Dfa(a1,a2,a3,a4,a5,a6,a7,a8,a9)
+    return res
 
 # Reload templates when they are changed
 app.config["TEMPLATES_AUTO_RELOAD"] = True
