@@ -28,6 +28,7 @@ def TEST():
     type=request.json['type']
     a=request.json['data']
     input_string=request.json['input_string']
+    print(input_string)
     if type=='DFA':
         return TestDFA(a,input_string)
     if type=='NDFA':
@@ -49,9 +50,15 @@ def TestDFA(a,input_string):
         initial_state=initial_state,
         final_states=final_states
         )
-        return {'response':str(dfa.is_string_valid(input_string))}
+        # z=map(dfa.is_string_valid,input_string)
+        testData = []
+        for i in input_string:
+            testData.append(dfa.is_string_valid(i))
+        # print(list(z))
+        print(testData)
+        return {'res':testData}
     except:
-        return 'Not a Valid DFA'
+        return {'msg':'Not a Valid DFA'}
 
 
 
