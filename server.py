@@ -1,17 +1,25 @@
+# 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
+
+
 from functools import wraps
 from itsdangerous import json
 # from nltk.corpus import stopwords
 from flask import send_file
+from pdf2image import convert_from_path
+import base64
+
+from flask import send_file
 
 from flask import Flask, abort, request,render_template
 from flask_cors import CORS,cross_origin
-from sample import clean_, clean_DFA_NFA
+from sample import clean_, clean_DFA_NFA,clean_Moore
 
 # from automata.fa.dfa import DFA
 from DFA import DFA
 from NDFA import NDFA
 
 from nfa_to_dfa import function_Nfa_Dfa
+from Moore import Moore
 # from automata.fa.nfa import NFA
 # import automata.base.exceptions as exceptions
 # from automata.base.automaton import Automaton
@@ -36,6 +44,8 @@ def TEST():
         return TestNDFA(a,input_string)
     if type=='DFA_NFA':
         return TestDFA_NFA(a,input_string)
+    if type=='MOORE':
+        return TestMoore(a,input_string)
 
 
 
@@ -55,7 +65,7 @@ def TestDFA(a,input_string):
         for i in input_string:
             testData.append(dfa.is_string_valid(i))
         # print(list(z))
-        print(testData)
+        # print(testData)
         return {'res':testData}
     except:
         return {'msg':'Not a Valid DFA'}
@@ -73,21 +83,59 @@ def TestNDFA(a,input_string):
         initial_state=initial_state,
         final_states=final_states
         )
-        # print(ndfa.is_string_valid(input_string))
-        # print(transitions)
-        # print (ndfa.convert_to_dfa())
-
-        return {'response':str(ndfa.is_string_valid(input_string))}
-
+        testData = []
+        for i in input_string:
+            testData.append(ndfa.is_string_valid(i))
+        # print(list(z))
+        # print(testData)
+        return {'res':testData}
     except:
-        return 'Not a Valid NDFA'
+        return {'msg':'Not a Valid NDFA'}
 
-
+ 
 def TestDFA_NFA(a,input_string):
-    print('here')
-    a1,a2,a3,a4,a5,a6,a7,a8,a9=clean_DFA_NFA(a)
-    res=function_Nfa_Dfa(a1,a2,a3,a4,a5,a6,a7,a8,a9)
-    return res
+    try:
+        print('here')
+        a1,a2,a3,a4,a5,a6,a7,a8,a9=clean_DFA_NFA(a)
+        res=function_Nfa_Dfa(a1,a2,a3,a4,a5,a6,a7,a8,a9)
+        # pip install pdf2image
+
+        pages = convert_from_path('nfa.pdf', 500)
+
+        for page in pages:
+            page.save('nfa.jpg', 'JPEG')
+
+
+        # encoded_string= base64.b64encode(img_file.read())
+        # print()
+        with open("nfa.jpg", "rb") as image_file:
+            encoded_nfa = base64.b64encode(image_file.read())
+
+        return {'res':res,'converted':encoded_nfa.decode('utf-8')}
+    except:
+        return {'msg':'Not a Valid DFA','res':None}
+    
+
+
+
+def TestMoore(a,input_string):
+    # try:
+    if 1:
+        print('here2')
+
+        states,input_alphabet,output_alphabet,transitions,initial_state,output_table=clean_Moore(a)
+
+        # print(states,input_alphabet,output_alphabet,transitions,output_table,initial_state)
+
+        moore=Moore(states,input_alphabet, output_alphabet, transitions, initial_state, output_table)
+        print(moore)
+        return moore.get_output_from_string(input_string)
+
+    # except:
+        # return {'msg':'Not a Valid Moore','res':None}
+
+
+    # return res
 
 # Reload templates when they are changed
 app.config["TEMPLATES_AUTO_RELOAD"] = True
