@@ -135,9 +135,9 @@ def clean_Moore(a):
     for n,i in enumerate(a['nodes']):
         node_number[n]=i['text']
         if i['isInitialState']:
-            initial_state=i['text'].split(':')[0]
-        output_alphabet.append(i['text'].split(':')[1])
-        t=i['text'].split(':')
+            initial_state=i['text'].split('/')[0]
+        output_alphabet.append(i['text'].split('/')[1])
+        t=i['text'].split('/')
         states.append(t[0])
         output_table[t[0]]=t[1]
 
@@ -148,15 +148,15 @@ def clean_Moore(a):
 
         input_symbol.append(i['text'])
         if i['type']=='Link':
-            if node_number[i['nodeA']].split(':')[0] in transitions:
-                transitions[node_number[i['nodeA']].split(':')[0]][i['text']]=node_number[i['nodeB']].split(':')[0]
+            if node_number[i['nodeA']].split('/')[0] in transitions:
+                transitions[node_number[i['nodeA']].split('/')[0]][i['text']]=node_number[i['nodeB']].split('/')[0]
             else: 
-                transitions[node_number[i['nodeA']].split(':')[0]]={i['text']:node_number[i['nodeB']].split(':')[0]}
+                transitions[node_number[i['nodeA']].split('/')[0]]={i['text']:node_number[i['nodeB']].split('/')[0]}
         else:
-            if node_number[i['node']].split(':')[0] in transitions:
-                transitions[node_number[i['node']].split(':')[0]][i['text']]=node_number[i['node']].split(':')[0]
+            if node_number[i['node']].split('/')[0] in transitions:
+                transitions[node_number[i['node']].split('/')[0]][i['text']]=node_number[i['node']].split('/')[0]
             else:
-                transitions[node_number[i['node']].split(':')[0]]={i['text']:node_number[i['node']].split(':')[0]}
+                transitions[node_number[i['node']].split('/')[0]]={i['text']:node_number[i['node']].split('/')[0]}
 
     input_symbol=set(input_symbol)
     return list(states),list(set(input_symbol)),list(set(output_alphabet)),transitions,initial_state,output_table
@@ -189,18 +189,18 @@ def clean_Mealy(a):
     for n,i in enumerate(a['links']):
         # print(i)
 
-        input_alphabet.append(i['text'].split(':')[0])
-        output_alphabet.append(i['text'].split(':')[1])
+        input_alphabet.append(i['text'].split('/')[0])
+        output_alphabet.append(i['text'].split('/')[1])
         if i['type']=='Link':
             if node_number[i['nodeA']] in transitions:
-                transitions[node_number[i['nodeA']]][i['text'].split(':')[0]]=(node_number[i['nodeB']],i['text'].split(':')[1])
+                transitions[node_number[i['nodeA']]][i['text'].split('/')[0]]=(node_number[i['nodeB']],i['text'].split('/')[1])
             else: 
-                transitions[node_number[i['nodeA']]]={i['text'].split(':')[0]:(node_number[i['nodeB']],i['text'].split(':')[1])}
+                transitions[node_number[i['nodeA']]]={i['text'].split('/')[0]:(node_number[i['nodeB']],i['text'].split('/')[1])}
         else:
             if node_number[i['node']] in transitions:
-                transitions[node_number[i['node']]][i['text'].split(':')[0]]=(node_number[i['node']],i['text'].split(':')[1])
+                transitions[node_number[i['node']]][i['text'].split('/')[0]]=(node_number[i['node']],i['text'].split('/')[1])
             else:
-                transitions[node_number[i['node']]]={i['text'].split(':')[0]:(node_number[i['node']],i['text'].split(':')[0])}
+                transitions[node_number[i['node']]]={i['text'].split('/')[0]:(node_number[i['node']],i['text'].split('/')[0])}
 
     # input_symbol=set(input_symbol)
     return states, list(set(input_alphabet)),list(set(output_alphabet)),transitions,initial_state

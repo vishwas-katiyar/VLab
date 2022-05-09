@@ -9,7 +9,7 @@ myobj = {'somekey': 'somevalue'}
 
 
 
-input('ppppppppppppppppppppppppppppppppppppp')
+# input('ppppppppppppppppppppppppppppppppppppp')
 import json
 # s=r''''''
 j_a='''{"nodes":[{"x":84,"y":141,"text":"q0","isAcceptState":False,"isInitialState":True},{"x":325,"y":123,"text":"q1","isAcceptState":True,"isInitialState":False},{"x":243,"y":321,"text":"q2","isAcceptState":False,"isInitialState":False}],"links":[{"type":"Link","nodeA":0,"nodeB":1,"text":"a","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"SelfLink","node":1,"text":"a","anchorAngle":-0.9533603520021061},{"type":"Link","nodeA":1,"nodeB":2,"text":"","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":2,"nodeB":0,"text":"b","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0}]} '''
@@ -23,7 +23,7 @@ a={"nodes":[{"x":246,"y":159,"index":0,"text":"q0","isAcceptState":False,"isInit
 # x = requests.post(dfa, json = {'dfa_data':a,'input_string':'1001'})
 # x = requests.post(nfa, json = {'nfa_data':a,'input_string':'1001'})
 # x = requests.post(nfa_accept, json = {'nfa_data':a,'input_string':'001'})
-x = requests.post(uel, json = {'data':a,'input_string':['0100','ababba'],'type':'MOORE'})
+x = requests.post(uel, json = {'data':a,'input_string':['0100','ababba'],'type':'DFA'})
 
 print(x.text)
 # data=json.loads(x.text)
