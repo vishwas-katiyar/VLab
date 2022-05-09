@@ -145,7 +145,7 @@ class Mealy(object):
         return output
 
 
-
+'''
 
 
 mealy = Mealy(
@@ -216,3 +216,4 @@ mealy_3 = Mealy(['q0', 'q1', 'q2', 'q3'],
 # print(mealy_2)
 print(mealy_3.get_output_from_string('0000'))
 # print(mealy_3.convert_to_moore())
+'''

@@ -12,7 +12,7 @@ from flask import send_file
 
 from flask import Flask, abort, request,render_template
 from flask_cors import CORS,cross_origin
-from sample import clean_, clean_DFA_NFA,clean_Moore
+from sample import clean_, clean_DFA_NFA,clean_Moore,clean_Mealy
 
 # from automata.fa.dfa import DFA
 from DFA import DFA
@@ -20,6 +20,7 @@ from NDFA import NDFA
 
 from nfa_to_dfa import function_Nfa_Dfa
 from Moore import Moore
+from Mealy import Mealy
 # from automata.fa.nfa import NFA
 # import automata.base.exceptions as exceptions
 # from automata.base.automaton import Automaton
@@ -46,6 +47,8 @@ def TEST():
         return TestNFA_DFA(a,input_string)
     if type=='MOORE':
         return TestMoore(a,input_string)
+    if type=='MEALY':
+        return TestMealy(a,input_string)
 
 
 
@@ -105,9 +108,6 @@ def TestNFA_DFA(a,input_string):
         for page in pages:
             page.save('nfa.jpg', 'JPEG')
 
-
-        # encoded_string= base64.b64encode(img_file.read())
-        # print()
         with open("nfa.jpg", "rb") as image_file:
             encoded_nfa = base64.b64encode(image_file.read())
 
@@ -131,14 +131,35 @@ def TestMoore(a,input_string):
         print(moore)
         temp=[]
         for i in input_string:
-            temp.append(moore.get_output_from_string(i))
-        return temp
+            try:
+                temp.append(moore.get_output_from_string(i))
+            except:
+                temp.append('Not a valid input.')
+        return {'res':temp}
 
     except:
         return {'msg':'Not a Valid Moore','res':None}
 
 
-    # return res
+def TestMealy(a,input_string):
+    try:
+    # if 1:
+        print('here3')
+
+        states,input_alphabet,output_alphabet,transitions,initial_state=clean_Mealy(a)
+
+        mealy=Mealy(states,input_alphabet,output_alphabet,transitions,initial_state)
+        print(mealy)
+        temp=[]
+        for i in input_string:
+            try:
+                temp.append(mealy.get_output_from_string(i))
+            except:
+                temp.append('Not avalid input.')
+        return {'res':temp}
+
+    except:
+        return {'msg':'Not a Valid Mealy','res':None}
 
 # Reload templates when they are changed
 app.config["TEMPLATES_AUTO_RELOAD"] = True
