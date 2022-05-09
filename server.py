@@ -119,8 +119,8 @@ def TestNFA_DFA(a,input_string):
 
 
 def TestMoore(a,input_string):
-    # try:
-    if 1:
+    try:
+    # if 1:
         print('here2')
 
         states,input_alphabet,output_alphabet,transitions,initial_state,output_table=clean_Moore(a)
@@ -129,10 +129,13 @@ def TestMoore(a,input_string):
 
         moore=Moore(states,input_alphabet, output_alphabet, transitions, initial_state, output_table)
         print(moore)
-        return moore.get_output_from_string(input_string)
+        temp=[]
+        for i in input_string:
+            temp.append(moore.get_output_from_string(i))
+        return temp
 
-    # except:
-        # return {'msg':'Not a Valid Moore','res':None}
+    except:
+        return {'msg':'Not a Valid Moore','res':None}
 
 
     # return res

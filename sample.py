@@ -1,6 +1,7 @@
 
 
-a={"nodes":[{"x":223,"y":107,"index":0,"text":"q0:1","isAcceptState":False,"isInitialState":True},{"x":427,"y":107,"index":1,"text":"q1:1","isAcceptState":False,"isInitialState":False},{"x":427,"y":321,"index":2,"text":"q2:0","isAcceptState":False,"isInitialState":False}],"links":[{"type":"Link","nodeA":0,"nodeB":1,"text":"a","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":2,"text":"a","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"SelfLink","node":2,"text":"a","anchorAngle":1.9513027039072617},{"type":"Link","nodeA":2,"nodeB":0,"text":"b","lineAngleAdjust":0,"parallelPart":0.5276536253680443,"perpendicularPart":16.88633151640753},{"type":"Link","nodeA":0,"nodeB":2,"text":"b","lineAngleAdjust":0,"parallelPart":0.4963248533118685,"perpendicularPart":27.21419412824141},{"type":"SelfLink","node":1,"text":"b","anchorAngle":-1.965587446494658}],"availableIndexes":[3,4]} 
+a={"nodes":[{"x":246,"y":159,"index":0,"text":"q0","isAcceptState":False,"isInitialState":True},{"x":410,"y":167,"index":1,"text":"q1","isAcceptState":False,"isInitialState":False},{"x":527,"y":257,"index":2,"text":"q2","isAcceptState":False,"isInitialState":False},{"x":338,"y":347,"index":3,"text":"q3","isAcceptState":False,"isInitialState":False}],"links":[{"type":"Link","nodeA":0,"nodeB":3,"text":"0:a","lineAngleAdjust":0,"parallelPart":0.3426771365960555,"perpendicularPart":71.838226769736},{"type":"Link","nodeA":0,"nodeB":1,"text":"1:b","lineAngleAdjust":3.141592653589793,"parallelPart":0.5152818991097922,"perpendicularPart":-51.183042675936775},{"type":"Link","nodeA":1,"nodeB":0,"text":"0:b","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":1,"nodeB":3,"text":"1:a","lineAngleAdjust":3.141592653589793,"parallelPart":0.3764367816091954,"perpendicularPart":-62.57932896566648},{"type":"SelfLink","node":2,"text":"0:b","anchorAngle":-1.9756881130799802},{"type":"SelfLink","node":2,"text":"1:a","anchorAngle":0},{"type":"Link","nodeA":3,"nodeB":1,"text":"0:a","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0},{"type":"Link","nodeA":3,"nodeB":0,"text":"1:b","lineAngleAdjust":0,"parallelPart":0.5,"perpendicularPart":0}],"availableIndexes":[4]}
+
 
 def clean_(a):
     states=[]
@@ -161,4 +162,47 @@ def clean_Moore(a):
     return list(states),list(set(input_symbol)),list(set(output_alphabet)),transitions,initial_state,output_table
 
 
-# print(clean_Moore(a))
+
+
+def clean_Mealy(a):
+    states=[]
+    input_alphabet=[]
+    output_alphabet=[]
+    transitions={}
+    initial_state=''
+    output_table={}
+
+
+    node_number={}
+    for n,i in enumerate(a['nodes']):
+        node_number[n]=i['text']
+        if i['isInitialState']:
+            initial_state=i['text']
+        output_alphabet.append(i['text'])
+        # t=
+        states.append(i['text'])
+        
+
+    transitions={}
+    input_symbol=[]
+    for n,i in enumerate(a['links']):
+        # print(i)
+
+        input_symbol.append(i['text'])
+        if i['type']=='Link':
+            if node_number[i['nodeA']] in transitions:
+                transitions[node_number[i['nodeA']]][i['text']]=node_number[i['nodeB']]
+            else: 
+                transitions[node_number[i['nodeA']]]={i['text']:node_number[i['nodeB']]}
+        else:
+            if node_number[i['node']] in transitions:
+                transitions[node_number[i['node']]][i['text']]=node_number[i['node']]
+            else:
+                transitions[node_number[i['node']]]={i['text']:node_number[i['node']]}
+
+    input_symbol=set(input_symbol)
+    return list(states),list(set(input_symbol)),list(set(output_alphabet)),transitions,initial_state,output_table
+
+
+
+print(clean_Mealy(a))

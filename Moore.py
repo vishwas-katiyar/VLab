@@ -118,7 +118,7 @@ class Moore(object):
 
 
 #               )
-# # print(moore)
-# # print(moore.get_output_from_string('abbba'))
-# # print(moore.convert_to_mealy())
+# print(moore)
+# print(moore.get_output_from_string('abbba'))
+# print(moore.convert_to_mealy())
 
