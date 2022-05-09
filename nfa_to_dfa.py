@@ -111,7 +111,7 @@ class DFA_NFA:
 		return False
 
 
-print("E-NFA to DFA")
+# print("E-NFA to DFA")
 
 # INPUT
 # Number of States : no_state

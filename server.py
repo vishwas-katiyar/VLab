@@ -1,8 +1,8 @@
 # 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
 
 
-from functools import wraps
-from itsdangerous import json
+# from functools import wraps
+# from itsdangerous import json
 # from nltk.corpus import stopwords
 from flask import send_file
 from pdf2image import convert_from_path
@@ -37,11 +37,11 @@ def TEST():
     type=request.json['type']
     a=request.json['data']
     input_string=request.json['input_string']
-    print(input_string)
+    # print(input_string)
     if type=='DFA':
         return TestDFA(a,input_string)
     if type=='NDFA':
-        print('NDFA')
+        # print('NDFA')
         return TestNDFA(a,input_string)
     if type=='NFA_DFA':
         return TestNFA_DFA(a,input_string)
@@ -98,7 +98,7 @@ def TestNDFA(a,input_string):
  
 def TestNFA_DFA(a,input_string):
     try:
-        print('here')
+        # print('here')
         a1,a2,a3,a4,a5,a6,a7,a8,a9=clean_DFA_NFA(a)
         res=function_Nfa_Dfa(a1,a2,a3,a4,a5,a6,a7,a8,a9)
         # pip install pdf2image
@@ -121,14 +121,14 @@ def TestNFA_DFA(a,input_string):
 def TestMoore(a,input_string):
     try:
     # if 1:
-        print('here2')
+        # print('here2')
 
         states,input_alphabet,output_alphabet,transitions,initial_state,output_table=clean_Moore(a)
 
         # print(states,input_alphabet,output_alphabet,transitions,output_table,initial_state)
 
         moore=Moore(states,input_alphabet, output_alphabet, transitions, initial_state, output_table)
-        print(moore)
+        # print(moore)
         temp=[]
         for i in input_string:
             try:
@@ -144,12 +144,12 @@ def TestMoore(a,input_string):
 def TestMealy(a,input_string):
     try:
     # if 1:
-        print('here3')
+        # print('here3')
 
         states,input_alphabet,output_alphabet,transitions,initial_state=clean_Mealy(a)
 
         mealy=Mealy(states,input_alphabet,output_alphabet,transitions,initial_state)
-        print(mealy)
+        # print(mealy)
         temp=[]
         for i in input_string:
             try:
