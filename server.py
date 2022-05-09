@@ -42,8 +42,8 @@ def TEST():
     if type=='NDFA':
         print('NDFA')
         return TestNDFA(a,input_string)
-    if type=='DFA_NFA':
-        return TestDFA_NFA(a,input_string)
+    if type=='NFA_DFA':
+        return TestNFA_DFA(a,input_string)
     if type=='MOORE':
         return TestMoore(a,input_string)
 
@@ -93,14 +93,14 @@ def TestNDFA(a,input_string):
         return {'msg':'Not a Valid NDFA'}
 
  
-def TestDFA_NFA(a,input_string):
+def TestNFA_DFA(a,input_string):
     try:
         print('here')
         a1,a2,a3,a4,a5,a6,a7,a8,a9=clean_DFA_NFA(a)
         res=function_Nfa_Dfa(a1,a2,a3,a4,a5,a6,a7,a8,a9)
         # pip install pdf2image
 
-        pages = convert_from_path('nfa.pdf', 500)
+        pages = convert_from_path('dfa.pdf', 500)
 
         for page in pages:
             page.save('nfa.jpg', 'JPEG')
@@ -111,7 +111,7 @@ def TestDFA_NFA(a,input_string):
         with open("nfa.jpg", "rb") as image_file:
             encoded_nfa = base64.b64encode(image_file.read())
 
-        return {'res':res,'converted':encoded_nfa.decode('utf-8')}
+        return {'res':res,'converted':'data:image/png;base64,'+encoded_nfa.decode('utf-8')}
     except:
         return {'msg':'Not a Valid DFA','res':None}
     
